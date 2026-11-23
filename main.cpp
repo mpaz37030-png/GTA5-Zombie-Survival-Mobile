@@ -201,14 +201,3 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD r, LPVOID lp) {
     else if (r == DLL_PROCESS_DETACH) scriptUnregister(h);
     return TRUE;
 }
-    else if (opcaoSelecionada == 3) SpawnNPC("s_m_y_marine_01", "WEAPON_CARBINERIFLE", true);
-        else if (opcaoSelecionada == 4) SpawnNPC("g_m_y_lost_01", "WEAPON_ASSAULTRIFLE", false);
-        else if (opcaoSelecionada == 5) ChamarAirdrop();
-    }
-}
-
-void ScriptMain() {
-    WAIT(2000);
-    Notificar("~y~Zumbi Survival Carregado! Aperte F1 para abrir o menu.");
-    while (true) {
-ede -= 0.35f;
