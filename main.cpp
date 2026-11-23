@@ -93,10 +93,10 @@ void LoopZumbis() {
     const char* anim = corredores ? "move_m@brave" : "move_m@drunk@verydrunk";
     STREAMING::REQUEST_ANIM_SET((char*)anim);
 
-    Ped peds;
+    Ped* peds = new Ped;
     int count = worldGetAllPeds(peds, 64);
     for (int i = 0; i < count; i++) {
-        Ped ped = peds[i];
+        Ped ped = *(peds + i);
         if (!ENTITY::DOES_ENTITY_EXIST(ped) || ped == p || !PED::IS_PED_HUMAN(ped) || PED::IS_PED_GROUP_MEMBER(ped, grp) || DECORATOR::DECOR_EXIST_ON(ped, (char*)"SobreviventeNPC")) continue;
         Vector3 pos = ENTITY::GET_ENTITY_COORDS(ped, true);
         float d = SYSTEM::VDIST(pPos.x, pPos.y, pPos.z, pos.x, pos.y, pos.z);
@@ -118,6 +118,8 @@ void LoopZumbis() {
             if (!PED::IS_PED_IN_COMBAT(ped, p)) AI::TASK_COMBAT_PED(ped, p, 0, 16);
         }
     }
+    delete peds;
+
     if (airdrop && ENTITY::DOES_ENTITY_EXIST(caixa)) {
         Vector3 bPos = ENTITY::GET_ENTITY_COORDS(caixa, true);
         if (SYSTEM::VDIST(pPos.x, pPos.y, pPos.z, bPos.x, bPos.y, bPos.z) < 3.0f) {
@@ -172,12 +174,14 @@ void Menu() {
     if ((GetAsyncKeyState(VK_NUMPAD2) & 1) || (GetAsyncKeyState(VK_DOWN) & 1)) sel = (sel + 1) % 6;
     if ((GetAsyncKeyState(VK_NUMPAD0) & 1) || (GetAsyncKeyState(VK_BACK) & 1)) menuAberto = false;
     if ((GetAsyncKeyState(VK_NUMPAD5) & 1) || (GetAsyncKeyState(VK_RETURN) & 1)) {
-        if (sel == 0) { modZumbi = !modZumbi; Aviso(modZumbi ? "~r~APOCALIPSE ZUMBI INICIADO!" : "~g~Modo Zumbi Desativado."); }
-        else if (sel == 1) corredores = !corredores;
-        else if (sel == 2) semPolicia = !semPolicia;
-        else if (sel == 3) CriarNPC("s_m_y_marine_01", "WEAPON_CARBINERIFLE", true);
-        else if (sel == 4) CriarNPC("g_m_y_lost_01", "WEAPON_ASSAULTRIFLE", false);
-        else if (sel == 5) CriarAirdrop();
+        switch (sel) {
+            case 0: modZumbi = !modZumbi; Aviso(modZumbi ? "~r~APOCALIPSE ZUMBI INICIADO!" : "~g~Modo Zumbi Desativado."); break;
+            case 1: corredores = !corredores; break;
+            case 2: semPolicia = !semPolicia; break;
+            case 3: CriarNPC("s_m_y_marine_01", "WEAPON_CARBINERIFLE", true); break;
+            case 4: CriarNPC("g_m_y_lost_01", "WEAPON_ASSAULTRIFLE", false); break;
+            case 5: CriarAirdrop(); break;
+        }
     }
 }
 
@@ -197,8 +201,7 @@ BOOL APIENTRY DllMain(HMODULE h, DWORD r, LPVOID lp) {
     else if (r == DLL_PROCESS_DETACH) scriptUnregister(h);
     return TRUE;
 }
-     else if (opcaoSelecionada == 2) semPolicia = !semPolicia;
-        else if (opcaoSelecionada == 3) SpawnNPC("s_m_y_marine_01", "WEAPON_CARBINERIFLE", true);
+    else if (opcaoSelecionada == 3) SpawnNPC("s_m_y_marine_01", "WEAPON_CARBINERIFLE", true);
         else if (opcaoSelecionada == 4) SpawnNPC("g_m_y_lost_01", "WEAPON_ASSAULTRIFLE", false);
         else if (opcaoSelecionada == 5) ChamarAirdrop();
     }
