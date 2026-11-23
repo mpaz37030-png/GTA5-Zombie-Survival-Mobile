@@ -1,5 +1,4 @@
 #include <windows.h>
-#include <stdio.h>
 #include "main.h"
 #include "natives.h"
 #include "types.h"
@@ -265,5 +264,6 @@ void AtualizarSobrevivencia() {
 
         if (fome == 0.0f || sede == 0.0f) {
             int vida = ENTITY::GET_ENTITY_HEALTH(playerPed);
+HEALTH(playerPed);
 .25f;
         sede -= 0.35f;
