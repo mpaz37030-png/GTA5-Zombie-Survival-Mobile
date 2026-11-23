@@ -5,19 +5,16 @@
 #include "types.h"
 #include "enums.h"
 
-// Estado do Mod
 bool modZumbiAtivo = false;
 bool zumbisCorredores = false;
 bool semPolicia = true;
 bool menuAberto = false;
 int opcaoSelecionada = 0;
 
-// Sobrevivência
 float fome = 100.0f;
 float sede = 100.0f;
 float estamina = 100.0f;
 
-// Airdrop
 Object caixaAirdrop = 0;
 Blip blipAirdrop = 0;
 bool airdropAtivo = false;
@@ -193,7 +190,6 @@ void AtualizarZumbis() {
         Vector3 pedPos = ENTITY::GET_ENTITY_COORDS(ped, true);
         float dist = SYSTEM::VDIST(playerPos.x, playerPos.y, playerPos.z, pedPos.x, pedPos.y, pedPos.z);
 
-        // Zumbi morto: mostra aviso e faz animação de pegar no chão com o botão 👆
         if (ENTITY::IS_ENTITY_DEAD(ped)) {
             if (dist < 2.2f) {
                 DesenharTexto("Toque em ~y~INTERAGIR~w~ para vasculhar", 0.5f, 0.82f, 0.42f, 255, 255, 255, true);
@@ -225,7 +221,6 @@ void AtualizarZumbis() {
         }
     }
 
-    // Caixa de Airdrop: faz animação de pegar no chão e remove a caixa
     if (airdropAtivo && ENTITY::DOES_ENTITY_EXIST(caixaAirdrop)) {
         Vector3 boxPos = ENTITY::GET_ENTITY_COORDS(caixaAirdrop, true);
         float distBox = SYSTEM::VDIST(playerPos.x, playerPos.y, playerPos.z, boxPos.x, boxPos.y, boxPos.z);
@@ -264,4 +259,11 @@ void AtualizarSobrevivencia() {
     if (agora - ultimoTickSobrevivencia > 2000) {
         ultimoTickSobrevivencia = agora;
         fome -= 0.25f;
+        sede -= 0.35f;
+        if (fome < 0.0f) fome = 0.0f;
+        if (sede < 0.0f) sede = 0.0f;
+
+        if (fome == 0.0f || sede == 0.0f) {
+            int vida = ENTITY::GET_ENTITY_HEALTH(playerPed);
+.25f;
         sede -= 0.35f;
