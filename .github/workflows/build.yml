@@ -1,0 +1,28 @@
+name: Compilar ZumbiMobile ASI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Baixar arquivos
+        uses: actions/checkout@v4
+
+      - name: Configurar MSVC x64
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Compilar ASI
+        run: |
+          cl.exe /LD /O2 /EHsc /I. main.cpp ScriptHookV.lib user32.lib /link /OUT:ZumbiMobile.asi
+
+      - name: Disponibilizar ASI para download
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZumbiMobile-ASI
+          path: ZumbiMobile.asi
