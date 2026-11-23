@@ -8,7 +8,8 @@ bool modoZumbiAtivo = false;
 
 void MostrarAviso(const char* texto) {
     UI::_SET_NOTIFICATION_TEXT_ENTRY("STRING");
-    UI::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME((char*)texto);
+        UI::_ADD_TEXT_COMPONENT_STRING((char*)texto);
+
     UI::_DRAW_NOTIFICATION(false, true);
 }
 
